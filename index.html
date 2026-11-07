@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>读开窍 · 《开窍开悟开智》解读站</title>
+<meta name="description" content="《开窍·开悟·开智》系列读本的结构化解读站：导读、章节脉络、概念关系、词典、人物谱与分段原文阅读器。">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#view-home">读开窍 <small>READ KAIQIAO</small></a>
+  <nav class="nav" id="nav" aria-label="站点视图"></nav>
+  <div class="tools"><button class="tbtn" id="themeBtn" type="button" aria-label="切换深浅主题">深色</button></div>
+</header>
+
+<main>
+
+  <!-- 1. 首页 Hero -->
+  <section class="view on" id="view-home">
+    <div class="hero">
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="hero-in">
+        <div class="brandline">读开窍 PRESENTS</div>
+        <h1>开窍<span>·</span>开悟<span>·</span>开智</h1>
+        <p class="hero-sub">人性、认知与生存法则的民间读本</p>
+        <p class="hero-lead">把三册原件拆成可以被检索、被对照、被追问的结构：先看清世界如何运转，再看清关系里的边界，最后看清钱与流量从哪里来。原文一字不改，观点保持原文立场，争议处另有辨析提示。</p>
+        <div class="hero-actions">
+          <button class="btn primary" id="btnRead" type="button">进入原文阅读器 →</button>
+          <button class="btn" id="btnGuide" type="button">从四个问题开始</button>
+          <button class="btn ghost" id="btnGloss" type="button">翻概念词典</button>
+        </div>
+        <div class="stats" id="heroStats"></div>
+      </div>
+      <div class="hero-foot">本机整理 · 仅供个人阅读学习 · 禁止商用与公开传播</div>
+    </div>
+  </section>
+
+  <!-- 2. 导读 -->
+  <section class="view" id="view-guide">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">01 / GUIDE</div>
+        <h2 class="sec-title">这本书在回答什么</h2>
+        <p class="sec-desc">按「读者会问的四个问题」重新编排九个部的材料。每个要点都锚定到真实章节，点开即读原文。</p>
+        <p class="sec-note">导读文字为编者概括，非原文；原文请以下方链接进入阅读器核对。书中含大量作者个人判断，本站只作整理，不作推荐。</p>
+      </div>
+      <div id="guideBody"></div>
+    </div>
+  </section>
+
+  <!-- 3. 脉络轴（时间线等价视图） -->
+  <section class="view" id="view-axis">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">02 / AXIS</div>
+        <h2 class="sec-title">章节脉络</h2>
+        <p class="sec-desc">这套书没有编年，因此时间坐标改为「章节坐标」：横轴是全部 170 章篇的先后顺序，纵轴是每章的真实字数，颜色深浅区分所属部。</p>
+        <p class="sec-note">可滚轮缩放、拖拽平移；点击任一点或明细行进入该章原文。窄屏自动切换为纵向章节流。所有坐标、字数均由正文统计得出。</p>
+      </div>
+      <div class="filterbar" id="axisFilters"></div>
+      <div class="chartbox chart-narrow" id="chart"></div>
+      <div class="mobileflow sec-note">当前为窄屏：散点图已转为下方纵向章节流，与宽屏数据一致，可直接点选。</div>
+      <div class="axislist" id="axisList"></div>
+      <p class="sec-note" id="axisCount"></p>
+    </div>
+  </section>
+
+  <!-- 4. 概念关系图（星图等价视图） -->
+  <section class="view" id="view-graph">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">03 / RELATIONS</div>
+        <h2 class="sec-title">概念关系</h2>
+        <p class="sec-desc">把词典里的概念摊开成一张图：节点大小对应它在正文中出现的次数，连线表示两个概念在同一章里共同出现，线越粗共现章数越多。</p>
+        <p class="sec-note">总览 → 悬停看明细 → 点击回词典。共现次数由正文逐字统计，非人工指定。四类概念按扇区排布，全站只用一种主色与一种反差色。</p>
+      </div>
+      <div class="graphbox" id="graphBox">
+        <div id="relSvg"></div>
+        <div class="gtip" id="gtip"></div>
+      </div>
+      <div class="legend">
+        <span><i></i>节点：概念（大小＝出现次数）</span>
+        <span><i style="border-color:var(--accent)"></i>反差色：当前选中</span>
+        <span>连线：同章共现次数</span>
+        <span>点击节点 → 词条与出处</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 词典 -->
+  <section class="view" id="view-glossary">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">04 / GLOSSARY</div>
+        <h2 class="sec-title">概念词典</h2>
+        <p class="sec-desc">从正文中真实出现的高频术语里选出 38 个，按四类归置。释义为编者依据原文语境所作的描述性概括，并附一句原文与可回跳的章节。</p>
+        <p class="sec-note">出现次数、覆盖章数、原文引句、关联章节全部由程序统计，未作任何估算。带「辨析」标记的词条另附阅读提示。</p>
+      </div>
+      <div class="searchbar">
+        <input id="glossSearch" type="search" placeholder="搜索术语、释义或原文引句…" aria-label="搜索词条">
+      </div>
+      <div class="filterbar" id="glossCats"></div>
+      <p class="gloss-meta" id="glossMeta"></p>
+      <div class="grid g3" id="glossBody"></div>
+    </div>
+  </section>
+
+  <!-- 6. 人物 / 角色谱 -->
+  <section class="view" id="view-figures">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">05 / FIGURES</div>
+        <h2 class="sec-title">人物与角色谱</h2>
+        <p class="sec-desc">这套书没有阵营与家族，有的是「谁在叙述、谁被援引、谁在行动」。按典籍人物、当代商业人物、叙述者与类型角色分组，全部来自原文真实出现。</p>
+        <p class="sec-note">每位条目下的出现次数与章节数由正文统计，点击「看原文出处」回到首次出现的章节。类型角色是书中的行动位置，不是真实人物。</p>
+      </div>
+      <div id="figBody"></div>
+    </div>
+  </section>
+
+  <!-- 7. 原文阅读器 -->
+  <section class="view" id="view-reader">
+    <div class="wrap" style="padding-top:26px;padding-bottom:30px">
+      <div class="sec-head" style="padding-top:0;margin-bottom:20px">
+        <div class="sec-kicker">06 / READER</div>
+        <h2 class="sec-title">分段原文</h2>
+        <p class="sec-desc">书 → 部 → 章 → 段。左侧章节树可搜索折叠，右侧正文可调字号、记住阅读位置。注疏三体系全站一致：概念实线、人名虚线、地名点线，点击看释义。</p>
+      </div>
+      <div class="reader">
+        <aside class="rside">
+          <div class="rside-head"><input id="treeSearch" type="search" placeholder="搜索章节标题…" aria-label="搜索章节"></div>
+          <div class="tree" id="tree"></div>
+        </aside>
+        <div class="rmain">
+          <div class="rbar">
+            <span id="rsizeLabel">16px</span>
+            <button id="rsizeDown" type="button" aria-label="缩小字号">字号 −</button>
+            <button id="rsizeUp" type="button" aria-label="放大字号">字号 +</button>
+            <span class="sp"></span>
+            <span>注疏：概念实线 · 人名虚线 · 地名点线</span>
+          </div>
+          <div class="rprogress"><i id="rprog"></i></div>
+          <div class="rbody" id="rbody">
+            <div class="rcrumb" id="rcrumb"></div>
+            <h1 class="rtitle" id="rtitle"></h1>
+            <div class="rmeta" id="rmeta"></div>
+            <div class="rquote" id="rquote"></div>
+            <div class="rnotice" id="rnotice"></div>
+            <div class="rtext" id="rtext"></div>
+          </div>
+          <div class="rnav">
+            <button class="btn ghost" id="rprev" type="button">← 上一章</button>
+            <button class="btn ghost" id="rnext" type="button">下一章 →</button>
+          </div>
+        </div>
+      </div>
+      <p class="sec-note">正文文字逐字保留，仅去除目录页与页码、按句读重排段落边界。第三、四部来自影印 OCR，可能存在识别误差，引用请以原件为准。</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="fin">
+    <div class="fbrand">读开窍 PRESENTS</div>
+    <div>《开窍 · 开悟 · 开智》民间读本整理　·　本机离线阅读　·　七个视图 + 分段原文</div>
+    <div class="fgrid">
+      <div>
+        <p class="disclaimer" id="disclaimText"></p>
+        <span class="visit" id="visit"></span>
+      </div>
+      <div>
+        <p><b>收录范围与原件</b></p>
+        <p id="aboutMeta"></p>
+        <div id="aboutBooks" style="margin-top:10px"></div>
+      </div>
+      <div>
+        <p><b>数据与立场</b></p>
+        <p>章节字数、概念词频、共现关系、人物出现次数、标签均由正文逐字统计，无估算、无占位数据。导读与词条释义为编者概括，已与原文区分标注。</p>
+        <p>书中观点属作者个人表述；涉及争议性手段的章节设有辨析提示，本站不推荐、不背书，也不提供任何实操建议。</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="popover" id="popover" role="dialog" aria-label="注疏释义"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/echarts.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
